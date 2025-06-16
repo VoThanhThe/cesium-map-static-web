@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.130/Build/Cesium/Cesium.js"></script>
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.130/Build/Cesium/Widgets/widgets.css" rel="stylesheet" />
+  <style>
+    html, body, #cesiumContainer {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <script type="module">
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzODY4ZmY1OC0xNWVjLTQ1ZTctYjM5Yi1hN2VkMDExMWZjMzUiLCJpZCI6MzEwNDg1LCJpYXQiOjE3NDk0NTk5MjN9.ZwtBDfv0ynlRlWa9NZNQx8b5S5u-EJmKyIYKmPa3qWg';
+
+    async function initCesium() {
+      const viewer = new Cesium.Viewer('cesiumContainer', {
+        terrain: Cesium.Terrain.fromWorldTerrain({
+          requestVertexNormals: true,
+        }),
+      });
+
+      viewer.scene.globe.enableLighting = true;
+      viewer.scene.globe.depthTestAgainstTerrain = true;
+
+      const buildingTileset = await Cesium.createOsmBuildingsAsync();
+      viewer.scene.primitives.add(buildingTileset);
+
+      // Hàm cho Flutter gọi
+      window.addImageOnTerrain = function () {
+  const rectangle = Cesium.Rectangle.fromDegrees(-180, -85, 180, 85); // Cực lớn
+  viewer.imageryLayers.addImageryProvider(
+    new Cesium.SingleTileImageryProvider({
+      url: 'images/img_frame_ptdn.png',
+      rectangle: rectangle,
+    })
+  );
+};
+
+    }
+
+    initCesium();
+  </script>
+</body>
+</html>
