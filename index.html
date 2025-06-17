@@ -32,17 +32,77 @@
       const buildingTileset = await Cesium.createOsmBuildingsAsync();
       viewer.scene.primitives.add(buildingTileset);
 
-      // Hàm cho Flutter gọi
-      window.addImageOnTerrain = function () {
-  const rectangle = Cesium.Rectangle.fromDegrees(-180, -85, 180, 85); // Cực lớn
-  viewer.imageryLayers.addImageryProvider(
-    new Cesium.SingleTileImageryProvider({
-      url: 'images/img_frame_ptdn.png',
-      rectangle: rectangle,
-    })
-  );
-};
+      // Fly tới Việt Nam mặc định
+      viewer.camera.flyTo({
+        destination: Cesium.Rectangle.fromDegrees(102.14441, 8.3817, 109.4642, 23.3934),
+        duration: 3,
+        complete: function () {
+    // 👇 Ép camera nhìn thẳng xuống
+    viewer.camera.setView({
+      orientation: {
+        heading: viewer.camera.heading,
+        pitch: Cesium.Math.toRadians(-90), // Nhìn thẳng xuống
+        roll: 0
+      }
+    });
+  }
+      });
 
+      let currentOverlayImage = null;
+
+      window.addImageOnTerrain = function () {
+        if (currentOverlayImage) {
+          viewer.imageryLayers.remove(currentOverlayImage);
+          currentOverlayImage = null;
+        }
+
+        const center = new Cesium.Cartesian2(
+          viewer.canvas.clientWidth / 2,
+          viewer.canvas.clientHeight / 2
+        );
+
+        const pickRay = viewer.scene.camera.getPickRay(center);
+        const cartesian = viewer.scene.globe.pick(pickRay, viewer.scene);
+
+        if (!cartesian) {
+          console.warn("Không xác định được toạ độ tâm.");
+          return;
+        }
+
+        const cartographic = Cesium.Cartographic.fromCartesian(cartesian);
+        const centerLon = Cesium.Math.toDegrees(cartographic.longitude);
+        const centerLat = Cesium.Math.toDegrees(cartographic.latitude);
+
+        // 🔍 Lấy độ cao camera để xác định kích thước ảnh
+        const cameraHeight = viewer.camera.positionCartographic.height;
+
+        // 🎯 Gấp đôi kích thước ảnh
+        const sizeInMeters = (cameraHeight / 4) * 2; // Gấp đôi
+        const halfSizeDegrees = (sizeInMeters / 2) / 111320;
+
+        const rectangle = Cesium.Rectangle.fromDegrees(
+          centerLon - halfSizeDegrees,
+          centerLat - halfSizeDegrees,
+          centerLon + halfSizeDegrees,
+          centerLat + halfSizeDegrees
+        );
+
+        const imageryProvider = new Cesium.SingleTileImageryProvider({
+          url: 'images/img_compass_satellite.png',
+          rectangle: rectangle,
+        });
+
+        currentOverlayImage = viewer.imageryLayers.addImageryProvider(imageryProvider);
+      };
+
+      window.removeImageOnTerrain = function () {
+        if (currentOverlayImage) {
+          viewer.imageryLayers.remove(currentOverlayImage);
+          currentOverlayImage = null;
+        } else {
+          console.warn("Không có ảnh nào để xoá");
+        }
+      };
     }
 
     initCesium();
