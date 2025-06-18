@@ -67,6 +67,7 @@ body,
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  background: linear-gradient(45deg, #ff6ec4, #f79533);
   cursor: pointer;
   z-index: 1001;
   transition: transform 0.3s ease;
