@@ -103,13 +103,13 @@ window.removeImageOnTerrain = function () {
     viewer.entities.remove(currentImageEntity);
     currentImageEntity = null;
   } else {
-    console.warn("Không có ảnh nào để xoá");
+    console.warn("There are no photos to delete.");
   }
 };
 // bay đến vị trí hiện tại
 window.flyToCurrentLocation = function () {
   if (!navigator.geolocation) {
-    alert("Trình duyệt không hỗ trợ định vị.");
+    alert("The browser does not support geolocation.");
     return;
   }
 
@@ -122,12 +122,12 @@ window.flyToCurrentLocation = function () {
         destination: Cesium.Cartesian3.fromDegrees(lon, lat, 1000),
         duration: 2,
         complete: () => {
-          console.log("Đã bay đến vị trí hiện tại:", lat, lon);
+          console.log("Flew to current location:", lat, lon);
         },
       });
     },
     (error) => {
-      alert("Không thể lấy vị trí hiện tại: " + error.message);
+      alert("Unable to get current location: " + error.message);
     }
   );
 };
