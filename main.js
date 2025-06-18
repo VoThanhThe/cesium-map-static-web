@@ -89,7 +89,7 @@ window.addImageOnTerrain = function () {
     rectangle: {
       coordinates: rectangle,
       material: new Cesium.ImageMaterialProperty({
-        image: "images/img_compass_satellite.png",
+        image: document.getElementById("imageSelect").value,
         transparent: true,
         color: initialColor,
       }),
