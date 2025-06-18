@@ -1,7 +1,5 @@
 // defaultAccessToken được tạo ra khi đăng kí tài khoản cesium js: https://cesium.com/platform/cesiumjs/
-Cesium.Ion.defaultAccessToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzODY4ZmY1OC0xNWVjLTQ1ZTctYjM5Yi1hN2VkMDExMWZjMzUiLCJpZCI6MzEwNDg1LCJpYXQiOjE3NDk0NTk5MjN9.ZwtBDfv0ynlRlWa9NZNQx8b5S5u-EJmKyIYKmPa3qWg";
-
+Cesium.Ion.defaultAccessToken = window.CESIUM_TOKEN;
 let viewer;
 let currentImageEntity = null;
 
