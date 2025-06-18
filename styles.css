@@ -12,7 +12,7 @@ body,
 .button-container {
   position: absolute;
   bottom: 160px;
-  right: 20px;
+  right: 8px;
   z-index: 10;
   display: flex;
   flex-direction: column;
@@ -33,26 +33,81 @@ body,
   background-color: #005fa3;
 }
 
-/* #colorPickerInput {
-  position: absolute;
-  bottom: 100px;
-  right: 20px;
-  z-index: 10;
-} */
-
-.floating-menu {
+#centerIcon {
+  pointer-events: none;
   position: absolute;
   top: 50%;
-  right: 20px;
-  transform: translateY(-50%);
-  width: 150px;
+  left: 50%;
+  transform: translate(-50%, -50%); /* căn giữa hoàn hảo */
+  z-index: 1000;
+
+  background: rgba(255, 255, 255, 0.8);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+
   display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Nút mở menu ban đầu */
+#menuToggleBtn {
+  position: absolute;
+  bottom: 50px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  background: rgba(30, 27, 47, 0.8);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  z-index: 1001;
+  transition: transform 0.3s ease;
+}
+#menuToggleBtn:hover {
+  transform: scale(1.05);
+}
+
+/* Ẩn/hiện menu với animation */
+.floating-menu {
+  position: absolute;
+  bottom: 110px;
+  right: 20px;
+  width: 180px;
+  /* background: rgba(30, 27, 47, 0.9); */
+  /* backdrop-filter: blur(10px); */
+  border-radius: 20px;
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); */
+  display: none; /* Ẩn hẳn */
   flex-direction: column;
   gap: 12px;
-  padding: 12px;
-  overflow-y: auto;
-  border-radius: 20px;
-  max-height: calc(100vh - 100px); /* giữ top 50px & bottom 50px */
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.floating-menu.show {
+  display: flex;
+  padding: 12px 0;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Dòng đóng menu */
+.close-menu {
+  background: #ff4d4d;
+  color: white;
+}
+.close-menu i {
+  color: white;
 }
 
 .menu-item {

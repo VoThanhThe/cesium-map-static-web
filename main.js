@@ -1,10 +1,12 @@
-Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzODY4ZmY1OC0xNWVjLTQ1ZTctYjM5Yi1hN2VkMDExMWZjMzUiLCJpZCI6MzEwNDg1LCJpYXQiOjE3NDk0NTk5MjN9.ZwtBDfv0ynlRlWa9NZNQx8b5S5u-EJmKyIYKmPa3qWg';
+// defaultAccessToken được tạo ra khi đăng kí tài khoản cesium js: https://cesium.com/platform/cesiumjs/
+Cesium.Ion.defaultAccessToken =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzODY4ZmY1OC0xNWVjLTQ1ZTctYjM5Yi1hN2VkMDExMWZjMzUiLCJpZCI6MzEwNDg1LCJpYXQiOjE3NDk0NTk5MjN9.ZwtBDfv0ynlRlWa9NZNQx8b5S5u-EJmKyIYKmPa3qWg";
 
 let viewer;
 let currentImageEntity = null;
 
 async function initCesium() {
-  viewer = new Cesium.Viewer('cesiumContainer', {
+  viewer = new Cesium.Viewer("cesiumContainer", {
     terrain: Cesium.Terrain.fromWorldTerrain({
       requestVertexNormals: true,
     }),
@@ -17,20 +19,25 @@ async function initCesium() {
   viewer.scene.primitives.add(buildingTileset);
 
   viewer.camera.flyTo({
-    destination: Cesium.Rectangle.fromDegrees(102.14441, 8.3817, 109.4642, 23.3934),
+    destination: Cesium.Rectangle.fromDegrees(
+      102.14441,
+      8.3817,
+      109.4642,
+      23.3934
+    ),
     duration: 3,
     complete: function () {
       viewer.camera.setView({
         orientation: {
           heading: viewer.camera.heading,
           pitch: Cesium.Math.toRadians(-90),
-          roll: 0
-        }
+          roll: 0,
+        },
       });
-    }
+    },
   });
 }
-
+// tại 1 la kinh mới
 window.addImageOnTerrain = function () {
   if (currentImageEntity) {
     viewer.entities.remove(currentImageEntity);
@@ -55,16 +62,18 @@ window.addImageOnTerrain = function () {
   const centerLat = Cesium.Math.toDegrees(cartographic.latitude);
 
   const cameraHeight = viewer.camera.positionCartographic.height;
-  const sizeInMeters = cameraHeight / 2;
+  const sizeInMeters = cameraHeight / 2; // đây là chổ điều chỉnh kích thước to, nhỏ cho la kinh(cameraHeight / 4 là nhỏ gấp đôi hiện tại)
 
   function metersToDegrees(meters, latitude) {
     const latDeg = meters / 111320;
-    const lonDeg = meters / (111320 * Math.cos(Cesium.Math.toRadians(latitude)));
+    const lonDeg =
+      meters / (111320 * Math.cos(Cesium.Math.toRadians(latitude)));
     return { latDeg, lonDeg };
   }
 
   const halfSizeMeters = sizeInMeters / 2;
-  const { latDeg: halfHeightDegrees, lonDeg: halfWidthDegrees } = metersToDegrees(halfSizeMeters, centerLat);
+  const { latDeg: halfHeightDegrees, lonDeg: halfWidthDegrees } =
+    metersToDegrees(halfSizeMeters, centerLat);
 
   const rectangle = Cesium.Rectangle.fromDegrees(
     centerLon - halfWidthDegrees,
@@ -80,15 +89,15 @@ window.addImageOnTerrain = function () {
     rectangle: {
       coordinates: rectangle,
       material: new Cesium.ImageMaterialProperty({
-        image: 'images/img_compass_satellite.png',
+        image: "images/img_compass_satellite.png",
         transparent: true,
-        color: initialColor
+        color: initialColor,
       }),
       stRotation: 0,
-    }
+    },
   });
 };
-
+// xoá la kinh vừa tạo
 window.removeImageOnTerrain = function () {
   if (currentImageEntity) {
     viewer.entities.remove(currentImageEntity);
@@ -97,7 +106,7 @@ window.removeImageOnTerrain = function () {
     console.warn("Không có ảnh nào để xoá");
   }
 };
-
+// bay đến vị trí hiện tại
 window.flyToCurrentLocation = function () {
   if (!navigator.geolocation) {
     alert("Trình duyệt không hỗ trợ định vị.");
@@ -114,7 +123,7 @@ window.flyToCurrentLocation = function () {
         duration: 2,
         complete: () => {
           console.log("Đã bay đến vị trí hiện tại:", lat, lon);
-        }
+        },
       });
     },
     (error) => {
@@ -124,19 +133,58 @@ window.flyToCurrentLocation = function () {
 };
 
 initCesium();
+// Đổi màu la kinh
+document
+  .getElementById("colorPickerInput")
+  .addEventListener("input", function (e) {
+    const hex = e.target.value;
+    const cesiumColor = Cesium.Color.fromCssColorString(hex).withAlpha(1.0);
 
-document.getElementById("colorPickerInput").addEventListener("input", function (e) {
-  const hex = e.target.value;
-  const cesiumColor = Cesium.Color.fromCssColorString(hex).withAlpha(1.0);
-
-  if (currentImageEntity) {
-    currentImageEntity.rectangle.material.color = cesiumColor;
+    if (currentImageEntity) {
+      currentImageEntity.rectangle.material.color = cesiumColor;
+    }
+  });
+// select color when input[type="color
+document.querySelector(".color-picker-item").addEventListener("click", (e) => {
+  // Nếu click KHÔNG phải là chính input thì focus input
+  if (e.target.tagName.toLowerCase() !== "input") {
+    e.currentTarget.querySelector('input[type="color"]').click();
   }
 });
-
-document.querySelectorAll('.menu-item').forEach(item => {
-  item.addEventListener('click', () => {
-    document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-    item.classList.add('active');
+// Action click item menu
+document.querySelectorAll(".menu-item").forEach((item) => {
+  item.addEventListener("click", () => {
+    document
+      .querySelectorAll(".menu-item")
+      .forEach((i) => i.classList.remove("active"));
+    item.classList.add("active");
   });
 });
+// Hiệu ứng đóng mở menu
+const toggleBtn = document.getElementById("menuToggleBtn");
+const menu = document.getElementById("floatingMenu");
+
+let isMenuOpen = false;
+
+toggleBtn.addEventListener("click", () => {
+  toggleMenu();
+});
+
+window.toggleMenu = function () {
+  isMenuOpen = !isMenuOpen;
+
+  if (isMenuOpen) {
+    menu.style.display = "flex"; // Hiện lại để animate
+    setTimeout(() => {
+      menu.classList.add("show");
+    }, 10); // delay nhỏ để kích hoạt transition
+    toggleBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+  } else {
+    menu.classList.remove("show");
+    toggleBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+    // Đợi animation xong mới display:none
+    setTimeout(() => {
+      menu.style.display = "none";
+    }, 300);
+  }
+};

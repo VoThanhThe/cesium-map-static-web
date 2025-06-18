@@ -22,8 +22,16 @@
   </head>
   <body>
     <div id="cesiumContainer"></div>
+    <div id="centerIcon">
+      <i class="fa-solid fa-plus"></i>
+    </div>
+    <!-- Nút mở menu (nằm bottom-right) -->
+    <div id="menuToggleBtn">
+      <i class="fa-solid fa-bars"></i>
+    </div>
 
-    <div class="floating-menu">
+    <!-- Menu xổ ra -->
+    <div class="floating-menu" id="floatingMenu">
       <div class="menu-item" onclick="addImageOnTerrain()">
         <i class="fas fa-image"></i>
         <span>Add Image</span>
