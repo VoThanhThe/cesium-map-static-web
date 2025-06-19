@@ -35,6 +35,31 @@ async function initCesium() {
       });
     },
   });
+  viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function (
+    e
+  ) {
+    e.cancel = true; // ✅ ngăn mặc định
+
+    // Gán toạ độ mới (VD: TP.HCM)
+    viewer.camera.flyTo({
+      destination: Cesium.Rectangle.fromDegrees(
+        102.14441,
+        8.3817,
+        109.4642,
+        23.3934
+      ),
+      duration: 3,
+      complete: function () {
+        viewer.camera.setView({
+          orientation: {
+            heading: viewer.camera.heading,
+            pitch: Cesium.Math.toRadians(-90),
+            roll: 0,
+          },
+        });
+      },
+    });
+  });
 }
 // tại 1 la kinh mới
 window.addImageOnTerrain = function () {
@@ -84,11 +109,14 @@ window.addImageOnTerrain = function () {
   const hex = document.getElementById("colorPickerInput").value;
   const initialColor = Cesium.Color.fromCssColorString(hex).withAlpha(1.0);
 
+  const imageSelect = document.getElementById("imageSelect");
+  const imageUrl = imageSelect.options[imageSelect.selectedIndex].dataset.image;
+
   currentImageEntity = viewer.entities.add({
     rectangle: {
       coordinates: rectangle,
       material: new Cesium.ImageMaterialProperty({
-        image: document.getElementById("imageSelect").value,
+        image: imageUrl,
         transparent: true,
         color: initialColor,
       }),
@@ -106,17 +134,53 @@ window.removeImageOnTerrain = function () {
   }
 };
 // bay đến vị trí tìm kiếm
-window.flyToLocation = function (lat, lon, height) {
+window.flyToLocation = function (name, lat, lon, height) {
+  // Bay đến vị trí
   viewer.camera.flyTo({
     destination: Cesium.Cartesian3.fromDegrees(lon, lat, height || 1000.0),
     duration: 2.0,
   });
+
+  // Xóa các marker cũ (nếu muốn)
+  viewer.entities.removeAll();
+
+  // Thêm marker mới
+  viewer.entities.add({
+    name: "Điểm tìm kiếm",
+    position: Cesium.Cartesian3.fromDegrees(lon, lat),
+    billboard: {
+      image: "images/ic_marker_map_light.png",
+      width: 32,
+      height: 32,
+      verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+      scaleByDistance: new Cesium.NearFarScalar(1000, 1.0, 20000, 2.5),
+      distanceDisplayCondition: new Cesium.DistanceDisplayCondition(
+        0.0,
+        20000.0
+      ),
+      eyeOffset: new Cesium.Cartesian3(0.0, 0.0, -10.0),
+    },
+    label: {
+      text: name,
+      font: "14px sans-serif",
+      fillColor: Cesium.Color.BLACK,
+      style: Cesium.LabelStyle.FILL,
+      outlineWidth: 1,
+      verticalOrigin: Cesium.VerticalOrigin.TOP,
+      pixelOffset: new Cesium.Cartesian2(0, -60),
+      showBackground: true,
+      backgroundColor: Cesium.Color.WHITE,
+    },
+  });
 };
 
-// bay đến vị trí hiện tại
+// ✅ Bay đến vị trí hiện tại và thêm marker
 window.flyToCurrentLocation = function () {
+  const lang = document.getElementById("imageSelect").value;
+  const labels = languageMap[lang] || languageMap["vn"];
+
   if (!navigator.geolocation) {
-    alert("The browser does not support geolocation.");
+    alert(labels.errorNoGeolocation);
     return;
   }
 
@@ -124,17 +188,10 @@ window.flyToCurrentLocation = function () {
     (position) => {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
-
-      viewer.camera.flyTo({
-        destination: Cesium.Cartesian3.fromDegrees(lon, lat, 1000),
-        duration: 2,
-        complete: () => {
-          console.log("Flew to current location:", lat, lon);
-        },
-      });
+      window.flyToLocation(labels.myLocation, lat, lon, 500);
     },
     (error) => {
-      alert("Unable to get current location: " + error.message);
+      alert(`${labels.errorLocationFailed}: ${error.message}`);
     }
   );
 };
@@ -195,3 +252,56 @@ window.toggleMenu = function () {
     }, 300);
   }
 };
+
+/// LANGUAGE
+const languageMap = {
+  vn: {
+    addImage: "Thêm ảnh",
+    removeImage: "Xóa ảnh",
+    flyToMyLocation: "Vị trí của tôi",
+    myLocation: "Vị trí của tôi",
+    errorNoGeolocation: "Trình duyệt không hỗ trợ định vị vị trí.",
+    errorLocationFailed: "Không thể lấy vị trí hiện tại",
+  },
+  en: {
+    addImage: "Add Image",
+    removeImage: "Remove Image",
+    flyToMyLocation: "Fly to My Location",
+    myLocation: "My Location",
+    errorNoGeolocation: "The browser does not support geolocation.",
+    errorLocationFailed: "Unable to get current location",
+  },
+  zh: {
+    addImage: "添加图片",
+    removeImage: "删除图片",
+    flyToMyLocation: "我的位置",
+    myLocation: "我的位置",
+    errorNoGeolocation: "浏览器不支持定位功能。",
+    errorLocationFailed: "无法获取当前位置",
+  },
+};
+
+// Hàm cập nhật text menu theo ngôn ngữ
+function updateMenuLanguage(lang) {
+  const labels = languageMap[lang];
+  if (labels) {
+    const menuItems = document.querySelectorAll(".menu-item");
+
+    menuItems[0].querySelector("span").textContent = labels.addImage;
+    menuItems[1].querySelector("span").textContent = labels.removeImage;
+    menuItems[2].querySelector("span").textContent = labels.flyToMyLocation;
+    menuItems[3].querySelector("span").textContent = labels.flyToPlace;
+  }
+}
+
+// Bắt sự kiện đổi ngôn ngữ từ select
+document.getElementById("imageSelect").addEventListener("change", (e) => {
+  const lang = e.target.value;
+  updateMenuLanguage(lang);
+});
+
+// ✅ Gọi hàm đổi ngôn ngữ ngay khi trang tải lần đầu
+window.addEventListener("DOMContentLoaded", () => {
+  const defaultLang = document.getElementById("imageSelect").value;
+  updateMenuLanguage(defaultLang);
+});
