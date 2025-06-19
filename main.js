@@ -8,6 +8,7 @@ async function initCesium() {
     terrain: Cesium.Terrain.fromWorldTerrain({
       requestVertexNormals: true,
     }),
+    geocoder: false,
   });
 
   viewer.scene.globe.enableLighting = true;
@@ -104,6 +105,14 @@ window.removeImageOnTerrain = function () {
     console.warn("There are no photos to delete.");
   }
 };
+// bay đến vị trí tìm kiếm
+function flyToLocation(lat, lon, height) {
+  viewer.camera.flyTo({
+    destination: Cesium.Cartesian3.fromDegrees(lon, lat, height || 1000.0),
+    duration: 2.0,
+  });
+}
+
 // bay đến vị trí hiện tại
 window.flyToCurrentLocation = function () {
   if (!navigator.geolocation) {
