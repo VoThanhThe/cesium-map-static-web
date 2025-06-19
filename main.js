@@ -106,12 +106,12 @@ window.removeImageOnTerrain = function () {
   }
 };
 // bay đến vị trí tìm kiếm
-function flyToLocation(lat, lon, height) {
+window.flyToLocation = function (lat, lon, height) {
   viewer.camera.flyTo({
     destination: Cesium.Cartesian3.fromDegrees(lon, lat, height || 1000.0),
     duration: 2.0,
   });
-}
+};
 
 // bay đến vị trí hiện tại
 window.flyToCurrentLocation = function () {
