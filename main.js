@@ -149,14 +149,21 @@ window.flyToLocation = function (name, lat, lon, height) {
     name: "Điểm tìm kiếm",
     position: Cesium.Cartesian3.fromDegrees(lon, lat),
     billboard: {
-      image: "images/ic_marker_map_light.png",
+      image: "images/ic_marker_map.png",
       width: 32,
       height: 32,
       verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-      scaleByDistance: new Cesium.NearFarScalar(1000, 1.0, 20000, 2.5),
+      heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
+      disableDepthTestDistance: Number.POSITIVE_INFINITY, // 👈 Luôn hiển thị
+      scaleByDistance: new Cesium.NearFarScalar(
+        1000,
+        2.0, // Gần (1km): to rõ
+        10000000,
+        1.2 // Xa (10,000km): vẫn còn nhìn thấy (dù nhỏ hơn 1 chút)
+      ),
       distanceDisplayCondition: new Cesium.DistanceDisplayCondition(
         0.0,
-        20000.0
+        20000000.0 // Hiển thị lên tới 20,000km (~bán kính Trái Đất)
       ),
       eyeOffset: new Cesium.Cartesian3(0.0, 0.0, -10.0),
     },
@@ -167,7 +174,9 @@ window.flyToLocation = function (name, lat, lon, height) {
       style: Cesium.LabelStyle.FILL,
       outlineWidth: 1,
       verticalOrigin: Cesium.VerticalOrigin.TOP,
-      pixelOffset: new Cesium.Cartesian2(0, -60),
+      pixelOffset: new Cesium.Cartesian2(0, -85),
+      heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
+      disableDepthTestDistance: Number.POSITIVE_INFINITY, // 👈 Luôn hiển thị
       showBackground: true,
       backgroundColor: Cesium.Color.WHITE,
     },
