@@ -216,7 +216,7 @@ body,
     padding: 8px;
   }
 }
-@media (min-width: 601px) and (max-width: 900px) {
+@media (min-width: 500px) and (max-width: 1000px) {
   .floating-menu {
     width: 220px;
     bottom: 120px;
