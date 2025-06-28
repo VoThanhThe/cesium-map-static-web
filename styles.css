@@ -53,214 +53,250 @@ body,
   justify-content: center;
 }
 
-/* Nút mở menu ban đầu */
-#menuToggleBtn {
+/* Nút add ở giữa đáy */
+#btn-add-bottom {
   position: absolute;
   bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 100px;
+  z-index: 1000;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+/* Nút vị trí của tôi dưới góc phải */
+#btn-my-location {
+  position: absolute;
+  bottom: 20px;
   right: 20px;
   width: 100px;
   height: 100px;
-  background: rgba(30, 27, 47, 0.8);
-  color: white;
+  z-index: 1000;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+/* Menu ngắn ở góc trên phải */
+.top-menu {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+
+  display: flex; /* 👉 Thêm dòng này để row có hiệu lực */
+  flex-direction: row; /* hoặc column nếu bạn muốn xếp dọc */
+  gap: 16px; /* 👉 khoảng cách giữa các hình */
+  padding: 8px;
+}
+.top-menu img {
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+}
+
+.top-menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.top-menu-item select,
+.top-menu-item input[type="color"] {
+  margin-top: 4px;
+  width: 48px;
+  height: 30px;
+  padding: 0;
+  border: none;
+}
+
+.flag-circle {
+  font-size: 54px;
+  cursor: pointer;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
+
+  background-image: url("icons/ic_bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  background: linear-gradient(45deg, #ff6ec4, #f79533);
-  cursor: pointer;
-  z-index: 1001;
-  transition: transform 0.3s ease;
+
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease;
 }
 
-#menuToggleBtn i {
-  font-size: 24px; /* 👈 chỉnh tùy ý: 24px, 28px, 32px... */
-}
-#menuToggleBtn:hover {
-  transform: scale(1.05);
+.flag-circle:hover {
+  background-color: #f0f0f0;
 }
 
-/* Ẩn/hiện menu với animation */
-.floating-menu {
+.flag-dropdown {
+  display: none;
   position: absolute;
-  bottom: 150px;
-  right: 20px;
-  width: 280px;
-  /* background: rgba(30, 27, 47, 0.9); */
-  /* backdrop-filter: blur(10px); */
-  border-radius: 20px;
-  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); */
-  display: none; /* Ẩn hẳn */
-  flex-direction: column;
-  gap: 12px;
-  z-index: 1000;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.floating-menu.show {
-  display: flex;
-  padding: 12px 0;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Dòng đóng menu */
-.close-menu {
-  background: #ff4d4d;
-  color: white;
-}
-.close-menu i {
-  color: white;
-}
-
-.menu-item {
-  display: flex;
-  align-items: center;
-  gap: 16px; /* 👈 tăng khoảng cách giữa icon và chữ */
-  padding: 14px 20px; /* 👈 vùng bấm lớn hơn */
-  border-radius: 100px;
-  background: #1e1b2f;
-  color: #f2f2f2;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 20px; /* 👈 chữ to hơn */
-  min-height: 50px; /* 👈 đảm bảo nút đủ cao */
-}
-
-.menu-item i {
-  color: #ff6ec4;
-  font-size: 20px; /* 👈 icon to hơn */
-  flex-shrink: 0;
-}
-
-.menu-item.active {
-  background: linear-gradient(45deg, #ff6ec4, #f79533);
-  color: white;
-}
-
-.menu-item.active i {
-  color: white;
-}
-/* Đặc biệt cho input color */
-.color-picker-item input[type="color"] {
-  border: none;
-  background: transparent;
-  width: 280px;
-  height: 50px;
+  top: 100%;
+  left: 0;
+  background: white;
+  list-style: none;
+  border: 1px solid #ccc;
+  width: 160px;
+  z-index: 999;
   padding: 0;
-  cursor: pointer;
-  appearance: none;
-  border-radius: 6px;
+  margin: 4px 0 0 0;
 }
-.image-selector-item select {
-  flex: 1;
-  background: transparent;
-  color: #fff;
-  border: none;
-  font-size: 18px;
-  padding: 12px;
-  outline: none;
+.flag-dropdown li {
+  padding: 8px 12px;
   cursor: pointer;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
+}
+.flag-dropdown li:hover {
+  background-color: #f5f5f5;
 }
 
+.hidden-select {
+  position: absolute;
+  bottom: 0;
+  opacity: 0;
+  pointer-events: none;
+  height: 0;
+}
+
+.top-menu-item {
+  position: relative;
+  cursor: pointer;
+}
+
+#flagDropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px 0;
+  z-index: 999;
+  width: 200px; /* tùy chỉnh nếu cần rộng hơn */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-item {
+  font-size: 18px; /* ✅ to gấp đôi (so với ~14px mặc định) */
+  padding: 14px 16px; /* ✅ tăng padding cho dễ bấm */
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Mobile phones: stack everything vertically */
 @media (max-width: 600px) {
-  .floating-menu {
-    position: absolute;
-    bottom: 110px;
-    right: 20px;
-    width: 200px;
-    /* background: rgba(30, 27, 47, 0.9); */
-    /* backdrop-filter: blur(10px); */
-    border-radius: 20px;
-    /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); */
-    display: none; /* Ẩn hẳn */
+  .top-menu {
     flex-direction: column;
-    gap: 12px;
-    z-index: 1000;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  .menu-item {
-    font-size: 16px; /* chữ nhỏ hơn */
-    padding: 10px 12px; /* vùng bấm nhỏ hơn */
-    gap: 10px; /* khoảng cách icon-text nhỏ lại */
-    min-height: 40px; /* chiều cao nút nhỏ hơn */
+    top: auto;
+    bottom: 20px;
+    right: 10px;
+    left: 10px;
+    gap: 8px;
   }
 
-  .menu-item i {
-    font-size: 18px; /* icon nhỏ hơn */
+  .top-menu img {
+    width: 60px;
+    height: 60px;
   }
 
-  #menuToggleBtn {
-    width: 50px;
-    height: 50px;
+  .flag-circle {
+    width: 60px;
+    height: 60px;
+    font-size: 32px;
   }
 
-  #menuToggleBtn i {
+  .dropdown-item {
     font-size: 16px;
-  }
-
-  .color-picker-item input[type="color"] {
-    width: 100%;
-    height: 40px;
-  }
-
-  .image-selector-item select {
-    font-size: 14px;
-    padding: 8px;
-  }
-}
-@media (min-width: 500px) and (max-width: 1000px) {
-  .floating-menu {
-    width: 220px;
-    bottom: 120px;
-  }
-
-  .menu-item {
-    font-size: 18px;
     padding: 12px 14px;
-    gap: 12px;
-    min-height: 44px;
   }
 
-  .menu-item i {
-    font-size: 18px;
-  }
-
-  #menuToggleBtn {
-    width: 70px;
-    height: 70px;
-    bottom: 40px;
-    right: 16px;
-  }
-
-  #menuToggleBtn i {
-    font-size: 20px;
-  }
-
-  .color-picker-item input[type="color"] {
-    width: 100%;
-    height: 44px;
-  }
-
-  .image-selector-item select {
-    font-size: 16px;
-    padding: 10px;
+  #btn-add-bottom,
+  #btn-my-location {
+    width: 60px;
+    height: 60px;
   }
 
   .button-container {
-    bottom: 140px;
-    right: 10px;
+    bottom: 120px;
+    right: 8px;
+    gap: 6px;
   }
 
-  .button-container button {
-    font-size: 13px;
-    padding: 6px 10px;
+  #centerIcon {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* Samsung Z Fold or small tablets */
+@media (min-width: 601px) and (max-width: 800px) {
+  .top-menu {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .top-menu img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .flag-circle {
+    width: 70px;
+    height: 70px;
+    font-size: 40px;
+  }
+
+  #btn-add-bottom,
+  #btn-my-location {
+    width: 70px;
+    height: 70px;
+  }
+
+  #centerIcon {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+/* iPad & tablets */
+@media (min-width: 801px) and (max-width: 1024px) {
+  .top-menu {
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .top-menu img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .flag-circle {
+    width: 80px;
+    height: 80px;
+    font-size: 48px;
+  }
+
+  #btn-add-bottom,
+  #btn-my-location {
+    width: 80px;
+    height: 80px;
+  }
+
+  #centerIcon {
+    width: 36px;
+    height: 36px;
   }
 }
