@@ -197,7 +197,7 @@ body,
 }
 
 /* Mobile phones: stack everything vertically */
-@media (max-width: 600px) {
+@media (min-width: 375px) and (max-width: 600px) {
   .top-menu {
     flex-direction: column;
     top: auto;
@@ -208,13 +208,13 @@ body,
   }
 
   .top-menu img {
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
   }
 
   .flag-circle {
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     font-size: 32px;
   }
 
@@ -225,8 +225,8 @@ body,
 
   #btn-add-bottom,
   #btn-my-location {
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
   }
 
   .button-container {
