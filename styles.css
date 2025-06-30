@@ -59,8 +59,8 @@ body,
   bottom: 50px;
   left: 50%;
   transform: translateX(-50%);
-  width: 100px;
-  height: 100px;
+  width: 60px;
+  height: 60px;
   z-index: 1000;
   cursor: pointer;
   pointer-events: auto;
@@ -71,8 +71,8 @@ body,
   position: absolute;
   bottom: 20px;
   right: 20px;
-  width: 100px;
-  height: 100px;
+  width: 60px;
+  height: 60px;
   z-index: 1000;
   cursor: pointer;
   pointer-events: auto;
@@ -91,8 +91,8 @@ body,
   padding: 8px;
 }
 .top-menu img {
-  width: 100px;
-  height: 100px;
+  width: 60px;
+  height: 60px;
   cursor: pointer;
 }
 
@@ -112,10 +112,10 @@ body,
 }
 
 .flag-circle {
-  font-size: 54px;
+  font-size: 32px;
   cursor: pointer;
-  width: 100px;
-  height: 100px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
 
   background-image: url("icons/ic_bg.png");
@@ -249,20 +249,20 @@ body,
   }
 
   .top-menu img {
-    width: 70px;
-    height: 70px;
+    width: 60;
+    height: 60;
   }
 
   .flag-circle {
-    width: 70px;
-    height: 70px;
+    width: 60;
+    height: 60;
     font-size: 40px;
   }
 
   #btn-add-bottom,
   #btn-my-location {
-    width: 70px;
-    height: 70px;
+    width: 60;
+    height: 60;
   }
 
   #centerIcon {
@@ -279,20 +279,20 @@ body,
   }
 
   .top-menu img {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
   }
 
   .flag-circle {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     font-size: 48px;
   }
 
   #btn-add-bottom,
   #btn-my-location {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
   }
 
   #centerIcon {
