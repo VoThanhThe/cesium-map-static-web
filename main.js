@@ -72,13 +72,6 @@ async function initCesium() {
   viewer.scene.primitives.add(buildingTileset);
 
   flyToDefaultView();
-
-  viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function (
-    e
-  ) {
-    e.cancel = true;
-    flyToDefaultView();
-  });
 }
 
 function flyToDefaultView() {
