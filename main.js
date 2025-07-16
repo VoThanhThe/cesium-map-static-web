@@ -185,17 +185,33 @@ window.addImageOnTerrain = function () {
   const initialColor = Cesium.Color.fromCssColorString(hex).withAlpha(1.0);
   const imageUrl = getSelectedImagePath();
 
-  currentImageEntity = viewer.entities.add({
-    rectangle: {
-      coordinates: rectangle,
-      material: new Cesium.ImageMaterialProperty({
-        image: imageUrl,
-        transparent: true,
-        color: initialColor,
-      }),
-      stRotation: 0,
-    },
-  });
+  // 👉 Hiển thị loading
+  const loadingSpinner = document.getElementById("loadingSpinner");
+  loadingSpinner.style.display = "block";
+
+  const image = new Image();
+  image.onload = () => {
+    loadingSpinner.style.display = "none"; // ✅ Ẩn loading khi ảnh load xong
+
+    currentImageEntity = viewer.entities.add({
+      rectangle: {
+        coordinates: rectangle,
+        material: new Cesium.ImageMaterialProperty({
+          image: image,
+          transparent: true,
+          color: initialColor,
+        }),
+        stRotation: 0,
+      },
+    });
+  };
+
+  image.onerror = () => {
+    loadingSpinner.style.display = "none";
+    console.error("Lỗi khi tải ảnh:", imageUrl);
+  };
+
+  image.src = imageUrl;
 };
 
 window.removeImageOnTerrain = function () {

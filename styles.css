@@ -53,6 +53,37 @@ body,
   justify-content: center;
 }
 
+#loadingSpinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+.spinner {
+  width: 150px;
+  height: 150px;
+  border: 6px solid transparent;
+  border-top: 6px solid transparent;
+  border-right: 6px solid #ffd700; /* Kim */
+  border-left: 6px solid #f5deb3; /* Kim - trung tính */
+  border-bottom: 6px solid #d4af37; /* Kim - ánh kim */
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+  box-shadow: 0 0 16px #f5deb3aa, inset 0 0 12px #fffacd88;
+  background: radial-gradient(circle, #fff8dc 10%, transparent 70%);
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /* Nút add ở giữa đáy */
 #btn-add-bottom {
   position: absolute;
