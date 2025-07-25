@@ -87,7 +87,7 @@ body,
 /* Nút add ở giữa đáy */
 #btn-add-bottom {
   position: absolute;
-  bottom: 50px;
+  bottom: 100px;
   left: 50%;
   transform: translateX(-50%);
   width: 60px;
@@ -100,7 +100,7 @@ body,
 /* Nút vị trí của tôi dưới góc phải */
 #btn-my-location {
   position: absolute;
-  bottom: 20px;
+  bottom: 70px;
   right: 20px;
   width: 60px;
   height: 60px;
