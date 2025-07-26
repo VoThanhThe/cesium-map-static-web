@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>La kinh địa hình</title>
+
+    <link rel="icon" type="image/png" href="icons/ic_launcher.png" />
+
+    <!-- CesiumJS -->
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.130/Build/Cesium/Cesium.js"></script>
+    <link
+      href="https://cesium.com/downloads/cesiumjs/releases/1.130/Build/Cesium/Widgets/widgets.css"
+      rel="stylesheet"
+    />
+
+    <!-- FontAwesome (nếu cần) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="cesiumContainer"></div>
+    <div id="centerIcon">
+      <i class="fa-solid fa-plus"></i>
+    </div>
+    <div id="loadingSpinner" style="display: none">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Nút Add giữa dưới -->
+    <img
+      onclick="addImageOnTerrain()"
+      id="btn-add-bottom"
+      src="icons/ic_zoom_in_map.png"
+      alt="Icon Add"
+      class="floating-button"
+    />
+
+    <!-- Nút vị trí của tôi -->
+    <img
+      id="btn-my-location"
+      src="icons/ic_my_location.png"
+      alt="Icon My Location"
+      class="corner-button"
+      onclick="flyToCurrentLocation()"
+    />
+
+    <!-- Menu ngắn gồm 2 hình góc trên bên phải -->
+    <div class="top-menu">
+      <!-- Nút home (giữ nguyên nếu cần) -->
+      <img
+        src="icons/ic_branch_gradient.png"
+        alt="Icon Home"
+        id="homeViewBtn"
+      />
+
+      <!-- Nút mở chọn màu -->
+      <div class="top-menu-item">
+        <label for="colorPickerInput" style="cursor: pointer">
+          <img src="icons/ic_color_picker.png" alt="Color Picker" />
+        </label>
+        <input
+          type="color"
+          id="colorPickerInput"
+          value="#ffffff"
+          style="display: none"
+        />
+      </div>
+
+      <!-- Nút chọn quốc gia -->
+      <div class="top-menu-item" id="flagSelectorToggle">
+        <span id="selected-flag" class="flag-circle">🇻🇳</span>
+        <div id="flagDropdown" class="dropdown hidden">
+          <div
+            class="dropdown-item"
+            data-lang="vn"
+            data-image="images/fr_compass_satellite.png"
+            data-selected="true"
+          >
+            🇻🇳 VN Compass
+          </div>
+          <div
+            class="dropdown-item"
+            data-lang="en"
+            data-image="images/fr_compass_satellite_en.png"
+          >
+            🇺🇸 US Compass
+          </div>
+          <div
+            class="dropdown-item"
+            data-lang="zh"
+            data-image="images/fr_compass_satellite_zh.png"
+          >
+            🇨🇳 CN Compass
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- App Logic -->
+    <script src="config.js"></script>
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
